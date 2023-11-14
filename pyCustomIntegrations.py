@@ -123,11 +123,11 @@ def Get_AccountUsage(VENDORSESSIONAPITOKEN: str, account: dict, vendorServices: 
     actionMultiple: str = '&'
     actionA: str = '$filter=' + 'OrgId eq ' + f'{account["OrgId"]}' + 'M' # Mandatory an M must be added to the end of the number to denote a decimal data type instead of the default double data type
     actionB: str = '$skip=' # Mandatory
-    actionC: str = f"$LastCheckInTime ge DATETIME'{LastCheckInTime}'" # Filtering for assets that have checked in w/in the past 45 days.
+    actionC: str = f" and LastCheckInTime ge DATETIME'{LastCheckInTime}'" # Filtering for assets that have checked in w/in the past 45 days.
     skipCounter: int = 0
     totalAssets: int = 0
     Assets: list = []
-    UriAssets = f"{Uri}{actionExpression}{actionB}{skipCounter}{actionMultiple}{actionA}{actionMultiple}{actionC}"
+    UriAssets = f"{Uri}{actionExpression}{actionB}{skipCounter}{actionMultiple}{actionA}{actionC}"
 
 
     try:
@@ -146,7 +146,7 @@ def Get_AccountUsage(VENDORSESSIONAPITOKEN: str, account: dict, vendorServices: 
         loopExit: int = 0
 
         while totalAssets > len(Assets) and loopExit <= 10:  
-            UriAssets = f"{Uri}{actionExpression}{actionB}{skipCounter}{actionMultiple}{actionA}{actionMultiple}{actionC}"
+            UriAssets = f"{Uri}{actionExpression}{actionB}{skipCounter}{actionMultiple}{actionA}{actionC}"
             response: object = session.get(UriAssets, headers=sessionHeaders, json=sessionPayload)
             sessionResponse: object = response.json()
 
